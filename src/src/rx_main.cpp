@@ -26,7 +26,7 @@ SX1280Driver Radio;
 #endif
 
 #ifdef PLATFORM_STM32
-#include "STM32_UARTinHandler.h"
+#include "rx_uart_in.h"
 #endif
 
 //// CONSTANTS ////
@@ -740,6 +740,6 @@ void loop()
     }
 
     #ifdef PLATFORM_STM32
-    STM32_RX_HandleUARTin();
+    RX_UARTinHandle();
     #endif
 }
