@@ -365,6 +365,7 @@ void ICACHE_RAM_ATTR UnpackMSPData()
 
 void ICACHE_RAM_ATTR ProcessRFPacket()
 {
+    noInterrupts();
     beginProcessing = micros();
     uint8_t calculatedCRC = CalcCRC(Radio.RXdataBuffer, 7) + CRCCaesarCipher;
     uint8_t inCRC = Radio.RXdataBuffer[7];
@@ -382,6 +383,7 @@ void ICACHE_RAM_ATTR ProcessRFPacket()
         }
         Serial.println("");
         #endif
+        interrupts();
         return;
     }
 
@@ -390,14 +392,13 @@ void ICACHE_RAM_ATTR ProcessRFPacket()
         #ifndef DEBUG_SUPPRESS
         Serial.println("Wrong device address on RF packet");
         #endif
+        interrupts();
         return;
     }
 
     LastValidPacketPrevMicros = LastValidPacketMicros;
     LastValidPacketMicros = beginProcessing;
     LastValidPacket = millis();
-
-    getRFlinkInfo();
 
     switch (type)
     {
@@ -464,6 +465,7 @@ void ICACHE_RAM_ATTR ProcessRFPacket()
         break;
     }
 
+    getRFlinkInfo();
     HandleFHSS();
     HandleSendTelemetryResponse();
     addPacketToLQ(); // Adds packet to LQ otherwise an artificial drop in LQ is seen due to sending TLM.
@@ -505,6 +507,7 @@ void ICACHE_RAM_ATTR ProcessRFPacket()
     Serial.print(":");
     Serial.println(linkQuality);
 #endif
+    interrupts();
 }
 
 void beginWebsever()
@@ -740,6 +743,6 @@ void loop()
     }
 
     #ifdef PLATFORM_STM32
-    STM32_RX_HandleUARTin();
+    //STM32_RX_HandleUARTin();
     #endif
 }
