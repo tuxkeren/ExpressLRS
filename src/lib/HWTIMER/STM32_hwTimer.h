@@ -27,7 +27,8 @@ public:
     static void init();
     static void stop();
     static void resume();
-    static void callback(HardwareTimer *);
+    static void callback(void);
+
     static void updateInterval(uint32_t newTimerInterval);
     static void phaseShift(int32_t newPhaseShift);
 

@@ -75,7 +75,7 @@ void hwTimer::phaseShift(int32_t newPhaseShift)
     }
 }
 
-void hwTimer::callback(HardwareTimer *)
+void hwTimer::callback(void)
 {
     if (hwTimer::TickTock)
     {

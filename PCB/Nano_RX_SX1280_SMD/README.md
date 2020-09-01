@@ -1,3 +1,10 @@
+v1.0 PCB
+- Pictured below
+
+v1.1 PCB
+- Lager IPEX pads
+- Added boot jumper pads under the button and base of the PCB.  These can be used in place of the button.  Any solder paste applied to these pads via a stencil will need to be removed before adding a button.
+
 # Nano 2.4 GHz Rx
 
 The ExLRS Nano Rx is 18mm*11mm and uses the same pinout as the CRSF Nano.  This allows for direct mounting to compatible flight controllers.
@@ -35,6 +42,8 @@ Below are links to the more uncommon components.
 The antennas linked below when cut to an end-to-end length of 49.8mm will be tunned for the middle of the 2.4GHz range.  Ideally confirm this with a vector analyser.
 
 https://www.aliexpress.com/item/4000197347021.html
+
+https://youtu.be/bOKTOFyyGHo
 
 <img src="img/antenna.jpg" width="40%"> <img src="img/antenna_on_quad.jpg" width="40%">
 

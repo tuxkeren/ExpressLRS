@@ -476,6 +476,15 @@ void ICACHE_RAM_ATTR CRSF::sendSyncPacketToTX(void *pvParameters) // in values i
             {
                 ESP_ERROR_CHECK(gpio_set_direction((gpio_num_t)GPIO_PIN_RCSIGNAL_RX, GPIO_MODE_INPUT));
                 gpio_matrix_in((gpio_num_t)GPIO_PIN_RCSIGNAL_RX, U1RXD_IN_IDX, true);
+                #ifdef UART_INVERTED
+                gpio_matrix_in((gpio_num_t)GPIO_PIN_RCSIGNAL_RX, U1RXD_IN_IDX, true);
+                gpio_pulldown_en((gpio_num_t)GPIO_PIN_RCSIGNAL_RX);
+                gpio_pullup_dis((gpio_num_t)GPIO_PIN_RCSIGNAL_RX);
+                #else
+                gpio_matrix_in((gpio_num_t)GPIO_PIN_RCSIGNAL_RX, U1RXD_IN_IDX, false);
+                gpio_pullup_en((gpio_num_t)GPIO_PIN_RCSIGNAL_RX);
+                gpio_pulldown_dis((gpio_num_t)GPIO_PIN_RCSIGNAL_RX);
+                #endif
             }
             void ICACHE_RAM_ATTR CRSF::duplex_set_TX()
             {
@@ -484,7 +493,11 @@ void ICACHE_RAM_ATTR CRSF::sendSyncPacketToTX(void *pvParameters) // in values i
                 ESP_ERROR_CHECK(gpio_set_pull_mode((gpio_num_t)GPIO_PIN_RCSIGNAL_RX, GPIO_FLOATING));
                 ESP_ERROR_CHECK(gpio_set_level((gpio_num_t)GPIO_PIN_RCSIGNAL_TX, 0));
                 ESP_ERROR_CHECK(gpio_set_direction((gpio_num_t)GPIO_PIN_RCSIGNAL_TX, GPIO_MODE_OUTPUT));
+                #ifdef UART_INVERTED
                 gpio_matrix_out((gpio_num_t)GPIO_PIN_RCSIGNAL_TX, U1TXD_OUT_IDX, true, false);
+                #else
+                gpio_matrix_out((gpio_num_t)GPIO_PIN_RCSIGNAL_TX, U1TXD_OUT_IDX, false, false);
+                #endif
             }
 
             void ICACHE_RAM_ATTR CRSF::ESP32uartTask(void *pvParameters) //RTOS task to read and write CRSF packets to the serial port
@@ -629,7 +642,6 @@ void ICACHE_RAM_ATTR CRSF::sendSyncPacketToTX(void *pvParameters) // in values i
 
                 if (packetType == CRSF_FRAMETYPE_PARAMETER_WRITE)
                 {
-                    Serial.println("Got Other Packet"); // TODO use debug macro?
                     const volatile uint8_t *buffer = CRSF::inBuffer.asUint8_t;
                     if (buffer[3] == CRSF_ADDRESS_CRSF_TRANSMITTER && buffer[4] == CRSF_ADDRESS_RADIO_TRANSMITTER)
                     {
@@ -637,6 +649,7 @@ void ICACHE_RAM_ATTR CRSF::sendSyncPacketToTX(void *pvParameters) // in values i
                         ParameterUpdateData[1] = buffer[6];
                         RecvParameterUpdate();
                     }
+                    Serial.println("Got Other Packet"); // TODO use debug macro?
                 }
 
                 if (packetType == CRSF_FRAMETYPE_RC_CHANNELS_PACKED)
@@ -788,7 +801,6 @@ void ICACHE_RAM_ATTR CRSF::sendSyncPacketToTX(void *pvParameters) // in values i
 
                 if (packetType == CRSF_FRAMETYPE_PARAMETER_WRITE)
                 {
-                    Serial.println("Got Other Packet");
                     const volatile uint8_t *SerialInBuffer = CRSF::inBuffer.asUint8_t;
                     if (SerialInBuffer[3] == CRSF_ADDRESS_CRSF_TRANSMITTER && SerialInBuffer[4] == CRSF_ADDRESS_RADIO_TRANSMITTER)
                     {
@@ -797,6 +809,7 @@ void ICACHE_RAM_ATTR CRSF::sendSyncPacketToTX(void *pvParameters) // in values i
                         RecvParameterUpdate();
                         return true;
                     }
+                    Serial.println("Got Other Packet");
                 }
 
                 if (packetType == CRSF_FRAMETYPE_RC_CHANNELS_PACKED)
