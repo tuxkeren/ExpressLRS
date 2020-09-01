@@ -770,7 +770,7 @@ void loop()
         #endif
     }
 
-    #ifdef PLATFORM_STM32
+    #ifdef ENABLE_RX_UART_IN_TLM
     RX_UARTinHandle();
     #endif
 }
