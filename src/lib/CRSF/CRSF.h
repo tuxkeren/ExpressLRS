@@ -6,6 +6,7 @@
 #include "msp.h"
 #include "msptypes.h"
 #include "../../src/targets.h"
+#include "../../src/LowPassFilter.h"
 
 #ifdef PLATFORM_ESP32
 #include "esp32-hal-uart.h"
@@ -382,8 +383,6 @@ public:
 
     static volatile uint8_t ParameterUpdateData[2];
 
-    static bool firstboot;
-
     static uint8_t CSFR_TXpin_Module;
     static uint8_t CSFR_RXpin_Module;
 
@@ -398,6 +397,7 @@ public:
     static volatile crsf_sensor_gps_s TLMGPSsensor;
 
     static void Begin(); //setup timers etc
+    static void End(); //stop timers etc
 
     /// UART Handling ///
 
@@ -420,7 +420,7 @@ public:
     static void ICACHE_RAM_ATTR duplex_set_TX();
 #endif
 
-#if defined(TARGET_R9M_TX) || defined(TARGET_R9M_LITE_TX)
+#if defined(TARGET_R9M_TX) || defined(TARGET_R9M_LITE_TX) || defined(TARGET_R9M_LITE_PRO_TX)
     static void ICACHE_RAM_ATTR STM32initUART();
     static void ICACHE_RAM_ATTR UARTwdt();
     static void ICACHE_RAM_ATTR STM32handleUARTin();
@@ -429,11 +429,11 @@ public:
 
     void ICACHE_RAM_ATTR sendRCFrameToFC();
     void ICACHE_RAM_ATTR sendMSPFrameToFC(mspPacket_t* packet);
-    void ICACHE_RAM_ATTR sendLinkStatisticsToFC();
+    void sendLinkStatisticsToFC();
     void ICACHE_RAM_ATTR sendLinkStatisticsToTX();
     void ICACHE_RAM_ATTR sendLinkBattSensorToTX();
 
-    void ICACHE_RAM_ATTR sendLUAresponse(uint8_t val[]);
+    void sendLUAresponse(uint8_t val[]);
 
     static void ICACHE_RAM_ATTR sendSetVTXchannel(uint8_t band, uint8_t channel);
 
@@ -443,9 +443,13 @@ public:
 ///// Variables for OpenTX Syncing //////////////////////////
     #define OpenTXsyncPacketInterval 200 // in ms
     static volatile uint32_t OpenTXsyncLastSent;
-    static volatile uint32_t RequestedRCpacketInterval;
+    static uint32_t RequestedRCpacketInterval;
     static volatile uint32_t RCdataLastRecv;
     static volatile int32_t OpenTXsyncOffset;
+    static uint32_t OpenTXsyncOffsetSafeMargin;
+    static int32_t OpenTXsyncOffetFLTR;
+    static uint32_t SyncWaitPeriodCounter;
+    static void ICACHE_RAM_ATTR setSyncParams(uint32_t PacketInterval);
     static void ICACHE_RAM_ATTR JustSentRFpacket();
     static void ICACHE_RAM_ATTR sendSyncPacketToTX(void *pvParameters);
     static void ICACHE_RAM_ATTR sendSyncPacketToTX();
