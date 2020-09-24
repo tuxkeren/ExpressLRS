@@ -763,8 +763,5 @@ void loop()
         Serial.println("Timer Considered Locked");
         #endif
     }
-
-    #ifdef ENABLE_RX_UART_IN_TLM
     RX_UARTinHandle();
-    #endif
 }
