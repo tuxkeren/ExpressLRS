@@ -30,6 +30,12 @@
 
 ### PERFORMANCE OPTIONS: ### 
 
+#Improves Inital Syncing/Binding Speed (Currently Experimental)
+-DFAST_SYNC 
+
+#unlocks >250mw output power for R9M (Fan mod suggested: https://github.com/AlessandroAU/ExpressLRS/wiki/R9M-Fan-Mod-Cover)
+#-DR9M_UNLOCK_HIGHER_POWER
+
 #-DNO_SYNC_ON_ARM
 #-DARM_CHANNEL=AUX1
 
@@ -54,5 +60,6 @@
 #-DUSE_ESP8266_BACKPACK
 
 #-DJUST_BEEP_ONCE
+#-DMY_STARTUP_MELODY="B5 16 P16 B5 16 P16 B5 16 P16 B5 2 G5 2 A5 2 B5 8 P4 A5 8 B5 1|140|-3"
 
 #-DUSE_500HZ

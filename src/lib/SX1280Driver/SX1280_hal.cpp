@@ -86,6 +86,7 @@ void SX1280Hal::init()
 #endif
 
 #ifdef PLATFORM_STM32
+    Serial.println("Config SPI");
     SPI.setMOSI(GPIO_PIN_MOSI);
     SPI.setMISO(GPIO_PIN_MISO);
     SPI.setSCLK(GPIO_PIN_SCK);
@@ -206,7 +207,6 @@ void ICACHE_RAM_ATTR SX1280Hal::ReadRegister(uint16_t address, uint8_t *buffer, 
     WaitOnBusy();
     digitalWrite(GPIO_PIN_NSS, LOW);
 
-    memcpy(OutBuffer + 4, buffer, size);
     SPI.transfer(OutBuffer, uint8_t(sizeof(OutBuffer)));
     memcpy(buffer, OutBuffer + 4, size);
 
@@ -251,7 +251,6 @@ void ICACHE_RAM_ATTR SX1280Hal::ReadBuffer(uint8_t offset, volatile uint8_t *buf
     OutBuffer[0] = SX1280_RADIO_READ_BUFFER;
     OutBuffer[1] = offset;
     OutBuffer[2] = 0x00;
-    memcpy(OutBuffer + 3, localbuf, size);
 
     WaitOnBusy();
     digitalWrite(GPIO_PIN_NSS, LOW);
@@ -267,16 +266,17 @@ void ICACHE_RAM_ATTR SX1280Hal::ReadBuffer(uint8_t offset, volatile uint8_t *buf
     }
 }
 
-void ICACHE_RAM_ATTR SX1280Hal::WaitOnBusy()
+bool ICACHE_RAM_ATTR SX1280Hal::WaitOnBusy()
 {
-    #define wtimeoutUS 5000
+    #define wtimeoutUS 1000
     uint32_t startTime = micros();
 
     while (digitalRead(GPIO_PIN_BUSY) == HIGH) // wait untill not busy or until wtimeoutUS
     {
-        if (micros() > startTime + wtimeoutUS)
+        if ((micros() - startTime) > wtimeoutUS)
         {
-            return;
+            //Serial.println("TO");
+            return false;
         }
         else
         {
@@ -289,6 +289,7 @@ void ICACHE_RAM_ATTR SX1280Hal::WaitOnBusy()
             #endif
         }
     }
+    return true;
 }
 
 void ICACHE_RAM_ATTR SX1280Hal::dioISR()

@@ -15,14 +15,14 @@ TaskHandle_t xESP32uartWDT = NULL;
 SemaphoreHandle_t mutexOutFIFO = NULL;
 #endif
 
-#if defined(TARGET_R9M_TX) || defined(TARGET_R9M_LITE_TX) || defined(TARGET_R9M_LITE_PRO_TX)
+#if defined(TARGET_R9M_TX) || defined(TARGET_R9M_LITE_TX) || defined(TARGET_R9M_LITE_PRO_TX) || defined(TARGET_RX_GHOST_ATTO_V1)
 HardwareSerial CRSF::Port(USART3);
-#ifndef TARGET_R9M_LITE_PRO_TX
-#include "stm32f1xx_hal.h"
-#include "stm32f1xx_hal_gpio.h"
-#else
+#if defined(TARGET_R9M_LITE_PRO_TX) || defined(TARGET_RX_GHOST_ATTO_V1)
 #include "stm32f3xx_hal.h"
 #include "stm32f3xx_hal_gpio.h"
+#else
+#include "stm32f1xx_hal.h"
+#include "stm32f1xx_hal_gpio.h"
 #endif
 #endif
 
@@ -90,7 +90,7 @@ LPF LPF_OPENTX_SYNC_OFFSET(3);
 uint32_t CRSF::OpenTXsyncOffsetSafeMargin = 1000;
 LPF LPF_OPENTX_SYNC_MARGIN(3);
 #else
-uint32_t CRSF::OpenTXsyncOffsetSafeMargin = 4000; // 400us 
+uint32_t CRSF::OpenTXsyncOffsetSafeMargin = 4000; // 400us
 #endif
 volatile uint32_t CRSF::OpenTXsyncLastSent = 0;
 uint32_t CRSF::RequestedRCpacketInterval = 5000; // default to 200hz as per 'normal'
@@ -376,7 +376,7 @@ void ICACHE_RAM_ATTR CRSF::sendSyncPacketToTX(void *pvParameters) // in values i
 
 #endif
 
-#if defined(PLATFORM_ESP8266) || defined(TARGET_R9M_RX) || defined(UNIT_TEST)
+#if defined(PLATFORM_ESP8266) || defined(TARGET_R9M_RX) || defined(TARGET_RX_GHOST_ATTO_V1) || defined(TARGET_SX1280_RX_CCG_NANO_v05) ||defined(UNIT_TEST)
         bool CRSF::RXhandleUARTout()
         {
             uint8_t peekVal = SerialOutFIFO.peek(); // check if we have data in the output FIFO that needs to be written

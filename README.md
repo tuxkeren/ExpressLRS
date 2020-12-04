@@ -1,4 +1,4 @@
-![2.4GHz Hardware](img/banner.png)
+![Banner](img/banner.png)
 
 ## Need help? Confused? Join the Community!
  * [RCGroups Discussion](https://www.rcgroups.com/forums/showthread.php?3437865-ExpressLRS-DIY-LoRa-based-race-optimized-RC-link-system)
@@ -10,13 +10,13 @@
 
 ![Build Status](https://github.com/AlessandroAU/ExpressLRS/workflows/Build%20ExpressLRS/badge.svg)
 
-ExpressLRS is an open source RC link for RC applications. It is based on **SX127x**/**SX1280** hardware combined with an **ESP8285**, **ESP32** or **STM32** for RX and TX respectively. ExpressLRS supports both `900 MHz` and `2.4 GHz` hardware options.
+ExpressLRS is an open source RC link for RC applications. It is based on **SX127x**/**SX1280** hardware combined with an **ESP8285**, **ESP32** or **STM32** for RX and TX respectively. ExpressLRS supports both `900 MHz` and `2.4 GHz` hardware options. ExpressLRS uses **LoRa** modulation at all packet rates to achieve the best possible range and consistency of packet delivery. 
 
-ExpressLRS can be flashed into existing **Frsky R9M hardware (RX and TX)** or **custom PCBs** can be make to suit. It can run at up to `500hz` or down to `50hz` depending on your preference of range or low latency.
+ExpressLRS can be flashed into existing **Frsky R9M hardware (RX and TX)**, **GHOST ATTO/ZEPTO Receivers** or **custom PCBs** can be make to suit. It can run at up to `500hz` or down to `50hz` depending on your preference of range or low latency.
 
 At `900 MHz` a maximum of `200 Hz` packet rate is supported. At `2.4 GHz` a blistering `500 Hz` is currently supported with a custom openTX binary with plans to extend this to `1000 Hz` once OpenTX support is added. This makes ExpressLRS one of the fastest RC links available while still offering long-range preformance. 
 
-![LatencyChart](https://raw.githubusercontent.com/AlessandroAU/ExpressLRS/master-dev/img/Average%20Total%20Latency.png)
+![LatencyChart](img/Average%20Total%20Latency.png)
 
 ExpressLRS aims to achieve the best possible link preformance in both speed/latency and range. However, due to the optimized packet structure only basic telemetry is provided. If you want MavLink this project is not for you. ExpressLRS uses a compressed packet structure which priorities the first 4 control channels, this allows it to achieve better raw performance than other commercial solutions. ExpressLRS is also very affordable, a TX module can be built for $30 and receivers for $15-20. Likewise, new/second hand Frsky R9M gear is compatible and can be acquired inexpensively.
 
@@ -28,15 +28,16 @@ More information can be found in the [wiki](https://github.com/AlessandroAU/Expr
 ![2.4GHz Hardware](img/24Ghardware.jpg)
 
 Links:
-- [Nano 2.4GHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/Nano_RX_SX1280_SMD) Currently Smallest DIY 2.4Ghz RX
-- [20x20 2.4GHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/20x20_RX_SX1280) Convenient Stack Mounted DIY 2.4GHz RX
+- [Nano 2.4GHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/2400MHz/RX_Nano) Currently Smallest DIY 2.4Ghz RX
+- [20x20 2.4GHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/2400MHz/RX_20x20) Convenient Stack Mounted DIY 2.4GHz RX
 
 ### 868/915MHz DIY Receiver and Transmitter
-![2.4GHz Hardware](img/900Mhardware.jpg)
+![868/915MHz Hardware](img/900Mhardware.jpg)
 
 Links:
-- [Mini 900MHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/Mini_Rx_v0.1) Currently Smallest DIY 868/915MHz RX
-- [20x20 900MHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/20x20_RX) Convenient Stack Mounted DIY 20x20mm 868/915MHz RX
+- [Mini 900MHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/900MHz/RX_Mini) Currently Smallest DIY 868/915MHz RX
+- [20x20 900MHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/900MHz/RX_20x20_0603_SMD) Convenient Stack Mounted DIY 20x20mm 868/915MHz RX
+- [20x20 900MHz RX](https://github.com/AlessandroAU/ExpressLRS/tree/master-dev/PCB/900MHz/RX_20x20_0805_SMD) Convenient Stack Mounted DIY 20x20mm 868/915MHz RX
 
 ## Compatible "Off-The-Shelf" Hardware
 
@@ -73,3 +74,5 @@ STLs for printing your own enclosure are available in the [STL folder](https://g
 
 ### Legal Stuff
 The use and operation of this type of device may require a license and some countries may forbid its use. It is entirely up to the end user to ensure compliance with local regulations. This is experimental software/hardware and there is no guarantee of stability or reliability. USE AT YOUR OWN RISK 
+
+[![Banner](img/footer.png)](https://github.com/AlessandroAU/ExpressLRS/wiki#community)

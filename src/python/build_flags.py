@@ -5,6 +5,7 @@ import subprocess
 import hashlib
 import fnmatch
 import time
+import melodyparser
 
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -42,6 +43,11 @@ def parse_flags(path):
                         define = "-DMY_UID=" + UIDbytes
                         sys.stdout.write("\u001b[32mUID bytes: " + UIDbytes + "\n")
                         sys.stdout.flush()
+                    if "MY_STARTUP_MELODY=" in define:
+                        defineValue = define.split('"')[1::2][0].split("|") # notes|bpm|transpose
+                        transposeBySemitones = int(defineValue[2]) if len(defineValue) > 2 else 0
+                        parsedMelody = melodyparser.parseMelody(defineValue[0].strip(), int(defineValue[1]), transposeBySemitones)
+                        define = "-DMY_STARTUP_MELODY_ARR=\"" + parsedMelody + "\""
                     build_flags.append(define)
     except IOError:
         print("File '%s' does not exist" % path)
@@ -94,3 +100,10 @@ elif fnmatch.filter(env['BUILD_FLAGS'], '*Regulatory_Domain_FCC_915*'):
     sys.stdout.write("\u001b[32mBuilding for SX1276 915FCC\n")
 
 time.sleep(1)
+
+# Set upload_protovol = 'custom' for STM32 MCUs
+#  otherwise firmware.bin is not generated
+stm = env.get('PIOPLATFORM', '') in ['ststm32']
+if stm:
+    env['UPLOAD_PROTOCOL'] = 'custom'
+

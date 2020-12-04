@@ -40,7 +40,9 @@ void POWERMGNT::init()
 {
 #ifdef TARGET_R9M_TX
     Serial.println("Init TARGET_R9M_TX DAC Driver");
-//R9DAC.init();
+#endif
+#ifdef GPIO_PIN_FAN_EN
+    pinMode(GPIO_PIN_FAN_EN, OUTPUT);
 #endif
 }
 
@@ -75,6 +77,15 @@ PowerLevels_e POWERMGNT::setPower(PowerLevels_e Power)
 #ifdef TARGET_R9M_TX
     Radio.SetOutputPower(0b0000);
     R9DAC.setPower((DAC_PWR_)Power);
+    CurrentPower = Power;
+#ifdef GPIO_PIN_FAN_EN
+    (Power >= PWR_250mW) ? digitalWrite(GPIO_PIN_FAN_EN, HIGH) : digitalWrite(GPIO_PIN_FAN_EN, LOW);
+#endif
+    return CurrentPower;
+#endif
+
+#ifdef TARGET_R9M_LITE_PRO_TX
+    Radio.SetOutputPower(0b0000);
     CurrentPower = Power;
     return CurrentPower;
 #endif
